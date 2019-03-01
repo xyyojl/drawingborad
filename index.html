@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>智绘画板</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <div class="bg-btn"></div>
+    <div class="color-group">
+        <h3>选择背景颜色:</h3>
+        <ul class="clearfix">
+            <li class="color-item" style="background-color: blue;"></li>
+            <li id="black" class="color-item" style="background-color: black;"></li>
+            <li id="red" class="color-item" style="background-color: #FF3333;"></li>
+            <li id="blue" class="color-item" style="background-color: #0066FF;"></li>
+            <li id="yellow" class="color-item" style="background-color: #FFFF33;"></li>
+            <li id="green" class="color-item" style="background-color: #33CC66;"></li>
+            <li id="gray" class="color-item" style="background-color: gray;"></li>
+            <li class="color-item" style="background-color: #F34334;"></li>
+            <li class="color-item" style="background-color: #E81F63;"></li>
+            <li class="color-item" style="background-color: #9B27AC;"></li>
+            <li class="color-item" style="background-color: #4CB050;"></li>
+            <li class="color-item" style="background-color: #029688;"></li>
+            <!-- #F34334 -->
+        </ul>
+    </div>
+    <div class="tools">
+        <div class="container">
+            <button class="save"  id="save" title="保存"></button>
+            <button class="brush active" id="brush" title="画笔"></button>
+            <button class="eraser" id="eraser" title="橡皮擦"></button>
+            <button class="clear" id="clear" title="清屏"></button>
+            <button class="undo"  id="undo" title="撤销"></button>
+            <button class="redo"  id="redo" title="再做"></button>
+        </div>
+    </div>
+    <script src="./js/main.js"></script>
+</body>
+</html>

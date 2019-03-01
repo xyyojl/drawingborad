@@ -1,0 +1,106 @@
+*{margin: 0;padding: 0;box-sizing: border-box;}
+*::before{box-sizing: border-box;}
+*::after{box-sizing: border-box;}
+ul{padding: 0; }
+.clearfix::after{
+    content: '';
+    display: block;
+    clear: both;
+}
+.bg-btn{
+    position: fixed;
+    top: 25px;
+    left: 25px;
+    width: 50px;
+    height: 50px;
+    background: url('../image/ic_droplet1.png') center center no-repeat;
+    background-size: 30px 30px;
+    border-radius: 50%;
+    box-shadow: 0 1px 2px 0 rgba(32,33,36,0.28);
+    cursor: pointer;
+}
+.bg-btn.active{
+    box-shadow: 0 1px 8px 0 rgba(32,33,36,0.28);
+}
+.tools{
+    position: fixed;
+    left: 0;
+    bottom: 30px;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+.tools .container{
+    /* height: 70px; */
+    padding: 8px 20px;
+    border-radius: 40px;
+    box-shadow: 0 1px 2px 0 rgba(32,33,36,0.28);
+}
+.tools button{
+    width: 30px;
+    height: 30px;
+    border: none;
+    outline: none;
+    background-size: 20px 20px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: #fff;
+    margin: 0 6px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+.tools button.save{
+    background-image: url('../image/save.png'); 
+}
+.tools button.brush{
+    background-image: url('../image/pen.png'); 
+}
+.tools button.eraser{
+    background-image: url('../image/eraser.png'); 
+}
+.tools button.clear{
+    background-image: url('../image/clear.png'); 
+}
+.tools button.undo{
+    background-image: url('../image/undo_sel.png'); 
+}
+.tools button.redo{
+    background-image: url('../image/redo_sel.png'); 
+}
+.tools button.active{
+    border-radius: 5px;
+    border: 2px solid #1398E6;
+}
+
+.color-group{
+    width: 322px;
+    padding: 16px;
+    margin:  0 auto;
+    border-radius: 5px;
+    box-shadow: 0 1px 4px 0 rgba(32,33,36,0.28);
+}
+.color-group h3{
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+.color-group li{
+    float: left;
+    list-style: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin: 4px;
+    cursor: pointer;
+}
+.color-group li.active::before{
+    content: '';
+    display: block;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    margin: 4px auto;
+}
