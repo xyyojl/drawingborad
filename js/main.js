@@ -4,8 +4,41 @@ let eraser = document.getElementById('eraser');
 let brush = document.getElementById('brush');
 let reSetCanvas = document.getElementById("clear");
 let save = document.getElementById("save");
+let selectBg = document.querySelector('.bg-btn');
+let bgGroup = document.querySelector('.color-group');
+let bgcolorBtn = document.querySelectorAll('.bgcolor-item');
+let penDetail = document.getElementById("penDetail");
 let eraserEnabled = false;
+let activeBgColor = '#fff';
 
+// 实现了切换背景颜色
+for (let i = 0; i < bgcolorBtn.length; i++) {
+    bgcolorBtn[i].onclick = function (e) {
+        e.stopPropagation();
+        for (let i = 0; i < bgcolorBtn.length; i++) {
+            bgcolorBtn[i].classList.remove("active");
+            this.classList.add("active");
+            activeBgColor = this.style.backgroundColor;
+            setCanvasBg(activeBgColor);
+        }
+
+    }
+}
+document.onclick = function(){
+    bgGroup.classList.remove('active');
+}
+
+
+selectBg.onclick = function(e){
+    bgGroup.classList.add('active');
+    e.stopPropagation();
+}
+
+
+
+
+// bgGroup.
+// bg-btn color-group
 autoSetSize();
 
 setCanvasBg('white');

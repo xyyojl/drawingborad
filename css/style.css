@@ -80,11 +80,19 @@ li{list-style: none;}
 
 .color-group{
     display: none;
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    margin-left: -161px;
     width: 322px;
     padding: 16px;
-    margin:  0 auto;
+    /* margin:  0 auto; */
     border-radius: 5px;
     box-shadow: 0 1px 4px 0 rgba(32,33,36,0.28);
+    background-color: #fff;
+}
+.color-group.active{
+    display: block;
 }
 .color-group h3{
     font-weight: 500;

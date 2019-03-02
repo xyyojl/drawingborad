@@ -10,21 +10,21 @@
 <body>
     <canvas id="canvas"></canvas>
     <div class="bg-btn"></div>
-    <div class="color-group">
+    <div class="color-group" id="bgGroup">
         <h3>选择背景颜色:</h3>
         <ul class="clearfix">
-            <li class="color-item active" style="background-color: blue;"></li>
-            <li id="black" class="color-item" style="background-color: black;"></li>
-            <li id="red" class="color-item" style="background-color: #FF3333;"></li>
-            <li id="blue" class="color-item" style="background-color: #0066FF;"></li>
-            <li id="yellow" class="color-item" style="background-color: #FFFF33;"></li>
-            <li id="green" class="color-item" style="background-color: #33CC66;"></li>
-            <li id="gray" class="color-item" style="background-color: gray;"></li>
-            <li class="color-item" style="background-color: #F34334;"></li>
-            <li class="color-item" style="background-color: #E81F63;"></li>
-            <li class="color-item" style="background-color: #9B27AC;"></li>
-            <li class="color-item" style="background-color: #4CB050;"></li>
-            <li class="color-item" style="background-color: #029688;"></li>
+            <li class="bgcolor-item" style="background-color: blue;"></li>
+            <li class="bgcolor-item" style="background-color: black;"></li>
+            <li class="bgcolor-item" style="background-color: #FF3333;"></li>
+            <li class="bgcolor-item" style="background-color: #0066FF;"></li>
+            <li class="bgcolor-item" style="background-color: #FFFF33;"></li>
+            <li class="bgcolor-item" style="background-color: #33CC66;"></li>
+            <li class="bgcolor-item" style="background-color: gray;"></li>
+            <li class="bgcolor-item" style="background-color: #F34334;"></li>
+            <li class="bgcolor-item" style="background-color: #E81F63;"></li>
+            <li class="bgcolor-item" style="background-color: #9B27AC;"></li>
+            <li class="bgcolor-item" style="background-color: #4CB050;"></li>
+            <li class="bgcolor-item" style="background-color: #029688;"></li>
         </ul>
     </div>
     <div class="tools">
@@ -37,7 +37,7 @@
             <button class="redo"  id="redo" title="再做"></button>
         </div>
     </div>
-    <div class="pen-detail">
+    <div class="pen-detail" id="penDetail">
         <p>笔类型</p>
         <ul class="pen-type clearfix">
             <li class="pen"></li>
