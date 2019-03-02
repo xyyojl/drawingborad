@@ -76,7 +76,7 @@ li{list-style: none;}
 }
 
 .color-group{
-    /* display: none; */
+    display: none;
     width: 322px;
     padding: 16px;
     margin:  0 auto;
@@ -111,6 +111,7 @@ li{list-style: none;}
     border-radius: 50%;
 }
 .pen-detail{
+    /* display: none; */
     position: fixed;
     left: 50%;
     margin-left: -140px;
@@ -191,10 +192,26 @@ li{list-style: none;}
     height: 2px;
 }
 input[type=range]{
+    -webkit-appearance: none;
     width: 180px;
     height: 24px;
+    outline: none;
 }
-
+input[type='range']::-webkit-slider-runnable-track{  
+    background-color: #DBDBDB;
+    height: 4px;
+    border-radius: 5px;
+}
+input[type='range']::-webkit-slider-thumb {  
+    -webkit-appearance: none;
+    /* border: 5px solid #fff; */
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #FF4081;
+    cursor: pointer;
+    margin-top: -4px;
+}
 .pen-color li{
     position: relative;
     float: left;
