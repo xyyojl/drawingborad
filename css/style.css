@@ -111,7 +111,7 @@ li{list-style: none;}
     border-radius: 50%;
 }
 .pen-detail{
-    /* display: none; */
+    display: none;
     position: fixed;
     left: 50%;
     margin-left: -140px;
@@ -242,4 +242,8 @@ input[type='range']::-webkit-slider-thumb {
     border-radius: 50%;
     margin-right: 6px;
     margin-left: 2px;
+}
+canvas{
+    display: block;
+    background: #fff;
 }
