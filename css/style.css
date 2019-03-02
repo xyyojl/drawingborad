@@ -2,6 +2,7 @@
 *::before{box-sizing: border-box;}
 *::after{box-sizing: border-box;}
 ul{padding: 0; }
+li{list-style: none;}
 .clearfix::after{
     content: '';
     display: block;
@@ -75,6 +76,7 @@ ul{padding: 0; }
 }
 
 .color-group{
+    /* display: none; */
     width: 322px;
     padding: 16px;
     margin:  0 auto;
@@ -84,8 +86,10 @@ ul{padding: 0; }
 .color-group h3{
     font-weight: 500;
     margin-bottom: 8px;
+    font-size: 18px;
 }
 .color-group li{
+    position: relative;
     float: left;
     list-style: none;
     width: 40px;
@@ -95,12 +99,130 @@ ul{padding: 0; }
     cursor: pointer;
 }
 .color-group li.active::before{
+    position: absolute;
+    left: 4px;
+    top: 4px;
     content: '';
     display: block;
     width: 32px;
     height: 32px;
     background: transparent;
+    border: 3px solid #fff;
+    border-radius: 50%;
+}
+.pen-detail{
+    position: fixed;
+    left: 50%;
+    margin-left: -140px;
+    bottom: 90px;
+    width: 280px;
+    height: 280px;
+    padding: 20px 24px;
+    border: 1px solid #81A4BD;
+    border-radius: 5px;
+    color: #808FA2;
+    font-style: 18px;
+    background: #fff;
+    font-size: 14px;
+}
+.pen-detail p{
+    margin-top: 2px;
+    margin-bottom: 4px;
+}
+.pen-detail .pen-type li{
+    float: left;
+    width: 30px;
+    height: 30px;
+    background-size: 28px 28px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+.pen-detail .pen-type li.pen{
+    background-image: url('../image/pen_sel.png');
+}
+.pen-detail .pen-type li.pen.active{
+    background-image: url('../image/pen.png');
+}
+.pen-detail .pen-type li.line{
+    background-image: url('../image/line_sel.png');
+}
+.pen-detail .pen-type li.line.active{
+    background-image: url('../image/line.png');
+}
+.pen-detail .pen-type li.circle{
+    border-radius: 50%;
+    border: 2px solid #CDCDCD;
+}
+.pen-detail .pen-type li.circle.active,
+.pen-detail .pen-type li.rect.active{
+    border-color: #1F1F1F;
+}
+.pen-detail .pen-type li.rect{
+    border-radius: 4px;
+    border: 2px solid #CDCDCD;
+}
+.pen-detail .pen-type li + li{
+    margin-left: 28px;
+}
+
+.circle-box{
+    line-height: 24px;
+}
+
+.circle-box{
+    position: relative;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    text-align: center;
+    margin-right: 8px;
+}
+#thickness{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -1px;
+    margin-top: -1px;
+    background: #000;
+    border-radius: 50%;
+    transform-origin: center;
+    width: 2px;
+    height: 2px;
+}
+input[type=range]{
+    width: 180px;
+    height: 24px;
+}
+
+.pen-color li{
+    position: relative;
+    float: left;
+    list-style: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin: 4px;
+    cursor: pointer;
+}
+.pen-color li.active::before{
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    content: '';
+    display: block;
+    width: 24px;
+    height: 24px;
+    background: transparent;
     border: 2px solid #fff;
     border-radius: 50%;
-    margin: 4px auto;
+}
+.pen-detail i.opacity{
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+    background: #000;
+    border-radius: 50%;
+    margin-right: 6px;
+    margin-left: 2px;
 }

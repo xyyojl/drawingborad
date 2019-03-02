@@ -13,7 +13,7 @@
     <div class="color-group">
         <h3>选择背景颜色:</h3>
         <ul class="clearfix">
-            <li class="color-item" style="background-color: blue;"></li>
+            <li class="color-item active" style="background-color: blue;"></li>
             <li id="black" class="color-item" style="background-color: black;"></li>
             <li id="red" class="color-item" style="background-color: #FF3333;"></li>
             <li id="blue" class="color-item" style="background-color: #0066FF;"></li>
@@ -25,7 +25,6 @@
             <li class="color-item" style="background-color: #9B27AC;"></li>
             <li class="color-item" style="background-color: #4CB050;"></li>
             <li class="color-item" style="background-color: #029688;"></li>
-            <!-- #F34334 -->
         </ul>
     </div>
     <div class="tools">
@@ -37,6 +36,28 @@
             <button class="undo"  id="undo" title="撤销"></button>
             <button class="redo"  id="redo" title="再做"></button>
         </div>
+    </div>
+    <div class="pen-detail">
+        <p>笔类型</p>
+        <ul class="pen-type clearfix">
+            <li class="pen"></li>
+            <li class="line"></li>
+            <li class="circle"></li>
+            <li class="rect"></li>
+        </ul>
+        <p>笔大小</p>
+        <span class="circle-box"><i id="thickness"></i></span> <input type="range" id="range1" min="1" max="10" value="1">
+        <p>笔颜色</p>
+        <ul class="pen-color clearfix">
+            <li class="active" style="background-color: black;"></li>
+            <li style="background-color: #FF3333;"></li>
+            <li style="background-color: #99CC00;"></li>
+            <li style="background-color: #0066FF;"></li>
+            <li style="background-color: #FFFF33;"></li>
+            <li style="background-color: #33CC66;"></li>
+        </ul>
+        <p>不透明度</p>
+        <i class="opacity"></i> <input type="range" min="1" max="10" value="1">
     </div>
     <script src="./js/main.js"></script>
 </body>
