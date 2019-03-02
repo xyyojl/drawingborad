@@ -3,6 +3,7 @@ let ctx = canvas.getContext('2d');
 let eraser = document.getElementById('eraser');
 let brush = document.getElementById('brush');
 let reSetCanvas = document.getElementById("clear");
+let save = document.getElementById("save");
 let eraserEnabled = false;
 
 autoSetSize();
@@ -132,6 +133,17 @@ reSetCanvas.onclick = function(){
 function setCanvasBg(color) {
     ctx.fillStyle = color;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+// 下载图片
+save.onclick = function(){
+    let imgUrl = canvas.toDataURL('image/png');
+    let saveA = document.createElement('a');
+    document.body.appendChild(saveA);
+    saveA.href = imgUrl;
+    saveA.download = 'mypic'+(new Date).getTime();
+    saveA.target = '_blank';
+    saveA.click();
 }
 
 
