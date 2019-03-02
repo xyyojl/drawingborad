@@ -1,6 +1,8 @@
 let canvas = document.getElementById('canvas');
 let ctx = canvas.getContext('2d');
-
+let eraser = document.getElementById('eraser');
+let brush = document.getElementById('brush');
+let eraserEnabled = false;
 
 autoSetSize();
 listenToUser();
@@ -31,19 +33,32 @@ function listenToUser() {
         painting = true;
         let x = e.clientX;
         let y = e.clientY;
-        lastPoint = {'x':x,'y':y};
-        drawCircle(x,y,5);
+        // drawCircle(x,y,5);
+        if(eraserEnabled){//要使用eraser
+            ctx.clearRect(x-5,y-5,10,10)
+        }else{
+            lastPoint = {'x':x,'y':y}
+        }
     }
 
     // 鼠标移动事件
     canvas.onmousemove = function(e){
-        if(painting){
-            let x = e.clientX;
-            let y = e.clientY;
-            let newPoint = {'x':x,'y':y};
-            drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y);
+        let x = e.clientX;
+        let y = e.clientY;
+        if(!painting){return}
+        if(eraserEnabled){
+            ctx.save()
+            ctx.globalCompositeOperation = "destination-out";
+            ctx.beginPath()
+            ctx.arc(x,y,5,0,2*Math.PI);
+            ctx.clip()
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.restore();
+        }else{
+            var newPoint = {'x':x,'y':y};
+            drawLine(lastPoint.x, lastPoint.y,newPoint.x, newPoint.y);
             lastPoint = newPoint;
-        }
+        }  
     }
 
     // 鼠标松开事件
@@ -84,6 +99,18 @@ function drawLine(x1,y1,x2,y2){
     ctx.closePath();
 }
 
+// 点击橡皮檫
+eraser.onclick = function(){
+    eraserEnabled = true;
+    eraser.classList.add('active');
+    brush.classList.remove('active');
+}
+// 点击画笔
+brush.onclick = function(){
+    eraserEnabled = false;
+    brush.classList.add('active');
+    eraser.classList.remove('active');
+}
 
 
 
