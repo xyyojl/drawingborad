@@ -8,8 +8,16 @@ let selectBg = document.querySelector('.bg-btn');
 let bgGroup = document.querySelector('.color-group');
 let bgcolorBtn = document.querySelectorAll('.bgcolor-item');
 let penDetail = document.getElementById("penDetail");
+
+let range1 = document.getElementById('range1');
+let range2 = document.getElementById('range2');
+let showOpacity = document.querySelector('.showOpacity');
 let eraserEnabled = false;
 let activeBgColor = '#fff';
+let ifPop = false;
+let lWidth = 2;
+let opacity = 1;
+let strokeColor = 'rgba(0,0,0,1)';
 
 // 实现了切换背景颜色
 for (let i = 0; i < bgcolorBtn.length; i++) {
@@ -34,7 +42,26 @@ selectBg.onclick = function(e){
     e.stopPropagation();
 }
 
+// 实现改变画笔的大小 1-20 放大的倍数 1 10 实际大小呢？ 2-20
 
+range1.onchange = function(){
+    console.log(range1.value);
+    console.log(typeof range1.value)
+    thickness.style.transform = 'scale('+ (parseInt(range1.value)) +')';
+    console.log(thickness.style.transform )
+    lWidth = parseInt(range1.value*2);
+    // console.log(penWidth.width)
+}
+
+range2.onchange = function(){
+    console.log(this.value);
+    console.log((1 - parseInt(this.value)/10))
+    opacity = 1 - parseInt(this.value)/10;
+    if(opacity !== 0){
+        showOpacity.style.opacity = opacity;
+    }
+    
+}
 
 
 // bgGroup.
@@ -129,7 +156,9 @@ function drawCircle(x,y,radius){
 function drawLine(x1,y1,x2,y2){
     ctx.beginPath();
     // 设置线条宽度
-    ctx.lineWidth = 10;
+    ctx.lineWidth = lWidth;
+    // ctx.strokeStyle = strokeColor;
+    // ctx.globalAlpha = opacity;
     // 设置线条末端样式。
     ctx.lineCap = "round";
     // 设定线条与线条间接合处的样式
@@ -154,6 +183,14 @@ brush.onclick = function(){
     eraserEnabled = false;
     brush.classList.add('active');
     eraser.classList.remove('active');
+    if(!ifPop){
+        // 弹出框
+        console.log('弹一弹')
+        penDetail.classList.add('active');
+    }else{
+        penDetail.classList.remove('active');
+    }
+    ifPop = !ifPop;
 }
 
 // 实现清屏
@@ -180,12 +217,6 @@ save.onclick = function(){
 }
 
 
-/* range1.onchange = function(){
-    console.log(range1.value);
-    console.log(typeof range1.value)
-    thickness.style.transform = 'scale('+ parseInt(range1.value) +')'
-    // console.log(penWidth.width)
-} */
 
 
 /* 对canvas中特定元素的旋转平移等操作实际上是对整个画布进行了操作，
