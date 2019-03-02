@@ -8,6 +8,7 @@ let selectBg = document.querySelector('.bg-btn');
 let bgGroup = document.querySelector('.color-group');
 let bgcolorBtn = document.querySelectorAll('.bgcolor-item');
 let penDetail = document.getElementById("penDetail");
+let aColorBtn = document.getElementsByClassName("color-item");
 
 let range1 = document.getElementById('range1');
 let range2 = document.getElementById('range2');
@@ -71,6 +72,22 @@ autoSetSize();
 setCanvasBg('white');
 
 listenToUser();
+
+getColor();
+
+function getColor(){
+    for (let i = 0; i < aColorBtn.length; i++) {
+        aColorBtn[i].onclick = function () {
+            for (let i = 0; i < aColorBtn.length; i++) {
+                aColorBtn[i].classList.remove("active");
+                this.classList.add("active");
+                activeColor = this.style.backgroundColor;
+                ctx.fillStyle = activeColor;
+                ctx.strokeStyle = activeColor;
+            }
+        }
+    }
+}
 
 function autoSetSize(){
     canvasSetSize();
