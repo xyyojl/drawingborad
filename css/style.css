@@ -19,6 +19,7 @@ li{list-style: none;}
     border-radius: 50%;
     box-shadow: 0 1px 2px 0 rgba(32,33,36,0.28);
     cursor: pointer;
+    background-color: #fff;
 }
 .bg-btn.active{
     box-shadow: 0 1px 8px 0 rgba(32,33,36,0.28);
@@ -38,6 +39,7 @@ li{list-style: none;}
     padding: 8px 20px;
     border-radius: 40px;
     box-shadow: 0 1px 2px 0 rgba(32,33,36,0.28);
+    background: #fff;
 }
 .tools button{
     width: 30px;

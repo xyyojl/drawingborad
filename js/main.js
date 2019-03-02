@@ -2,9 +2,13 @@ let canvas = document.getElementById('canvas');
 let ctx = canvas.getContext('2d');
 let eraser = document.getElementById('eraser');
 let brush = document.getElementById('brush');
+let reSetCanvas = document.getElementById("clear");
 let eraserEnabled = false;
 
 autoSetSize();
+
+setCanvasBg('white');
+
 listenToUser();
 
 function autoSetSize(){
@@ -33,9 +37,14 @@ function listenToUser() {
         painting = true;
         let x = e.clientX;
         let y = e.clientY;
-        // drawCircle(x,y,5);
         if(eraserEnabled){//要使用eraser
-            ctx.clearRect(x-5,y-5,10,10)
+            ctx.save();
+            ctx.globalCompositeOperation = "destination-out";
+            ctx.beginPath();
+            ctx.arc(x,y,5,0,2*Math.PI);
+            ctx.clip();
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.restore();
         }else{
             lastPoint = {'x':x,'y':y}
         }
@@ -47,11 +56,11 @@ function listenToUser() {
         let y = e.clientY;
         if(!painting){return}
         if(eraserEnabled){
-            ctx.save()
+            ctx.save();
             ctx.globalCompositeOperation = "destination-out";
-            ctx.beginPath()
+            ctx.beginPath();
             ctx.arc(x,y,5,0,2*Math.PI);
-            ctx.clip()
+            ctx.clip();
             ctx.clearRect(0,0,canvas.width,canvas.height);
             ctx.restore();
         }else{
@@ -84,6 +93,7 @@ function drawCircle(x,y,radius){
 }
 
 function drawLine(x1,y1,x2,y2){
+    ctx.beginPath();
     // 设置线条宽度
     ctx.lineWidth = 10;
     // 设置线条末端样式。
@@ -112,7 +122,17 @@ brush.onclick = function(){
     eraser.classList.remove('active');
 }
 
+// 实现清屏
+reSetCanvas.onclick = function(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    setCanvasBg('white');
+}
 
+// 重新设置canvas背景颜色
+function setCanvasBg(color) {
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
 
 
 /* range1.onchange = function(){
