@@ -1,5 +1,5 @@
 let canvas = document.getElementById('canvas');
-let ctx = canvas.getContext('2d');
+let context = canvas.getContext('2d');
 let eraser = document.getElementById('eraser');
 let brush = document.getElementById('brush');
 let reSetCanvas = document.getElementById("clear");
@@ -26,89 +26,14 @@ let strokeColor = 'rgba(0,0,0,1)';
 let radius = 5;
 
 
-for (let index = 0; index < closeBtn.length; index++) {
-    closeBtn[index].onclick = function(e){
-        let btnParent = e.target.parentElement;
-        btnParent.classList.remove('active');
-    }
-    
-}
-
-window.onbeforeunload = function(){
-    return "Reload site?";
-};
-
-// 实现了切换背景颜色
-for (let i = 0; i < bgcolorBtn.length; i++) {
-    bgcolorBtn[i].onclick = function (e) {
-        e.stopPropagation();
-        for (let i = 0; i < bgcolorBtn.length; i++) {
-            bgcolorBtn[i].classList.remove("active");
-            this.classList.add("active");
-            activeBgColor = this.style.backgroundColor;
-            setCanvasBg(activeBgColor);
-        }
-
-    }
-}
-document.onclick = function(){
-    bgGroup.classList.remove('active');
-    // penDetail.classList.remove('active');
-}
-
-
-selectBg.onclick = function(e){
-    bgGroup.classList.add('active');
-    e.stopPropagation();
-}
-
-// 实现改变画笔的大小 1-20 放大的倍数 1 10 实际大小呢？ 2-20
-
-range1.onchange = function(){
-    console.log(range1.value);
-    console.log(typeof range1.value)
-    thickness.style.transform = 'scale('+ (parseInt(range1.value)) +')';
-    console.log(thickness.style.transform )
-    lWidth = parseInt(range1.value*2);
-}
-
-range2.onchange = function(){
-    console.log(this.value);
-    console.log((1 - parseInt(this.value)/10))
-    opacity = 1 - parseInt(this.value)/10;
-    if(opacity !== 0){
-        showOpacity.style.opacity = opacity;
-    }
-    
-}
-
-
-// bgGroup.
-// bg-btn color-group
 autoSetSize();
 
 setCanvasBg('white');
 
 listenToUser();
 
-getColor();
 
-function getColor(){
-    for (let i = 0; i < aColorBtn.length; i++) {
-        aColorBtn[i].onclick = function (e) {
-            e.stopPropagation();
-            for (let i = 0; i < aColorBtn.length; i++) {
-                aColorBtn[i].classList.remove("active");
-                this.classList.add("active");
-                activeColor = this.style.backgroundColor;
-                ctx.fillStyle = activeColor;
-                ctx.strokeStyle = activeColor;
-            }
-            penDetail.classList.remove('active');
-            ifPop = false;
-        }
-    }
-}
+/* 下面是实现相关效果的函数，可以不用看 */
 
 function autoSetSize(){
     canvasSetSize();
@@ -124,13 +49,12 @@ function autoSetSize(){
     }
 }
 
-
+// 监听用户鼠标事件
 function listenToUser() {
     // 定义一个变量初始化画笔状态
     let painting = false;
     // 记录画笔最后一次的位置
     let lastPoint = {x: undefined, y: undefined};
-    // console.log(document.body.ontouchstart)
 
     if(document.body.ontouchstart !== undefined){
         canvas.ontouchstart = function (e) {
@@ -139,14 +63,14 @@ function listenToUser() {
             let x = e.touches[0].clientX;
             let y = e.touches[0].clientY;
             if(eraserEnabled){//要使用eraser
-                ctx.save();
-                ctx.globalCompositeOperation = "destination-out";
-                ctx.beginPath();
+                context.save();
+                context.globalCompositeOperation = "destination-out";
+                context.beginPath();
                 radius = (lWidth/2) > 5? (lWidth/2) : 5;
-                ctx.arc(x,y,radius,0,2*Math.PI);
-                ctx.clip();
-                ctx.clearRect(0,0,canvas.width,canvas.height);
-                ctx.restore();
+                context.arc(x,y,radius,0,2*Math.PI);
+                context.clip();
+                context.clearRect(0,0,canvas.width,canvas.height);
+                context.restore();
             }else{
                 lastPoint = {'x':x,'y':y}
             }
@@ -156,14 +80,14 @@ function listenToUser() {
             let y = e.touches[0].clientY;
             if(!painting){return}
             if(eraserEnabled){
-                ctx.save();
-                ctx.globalCompositeOperation = "destination-out";
-                ctx.beginPath();
+                context.save();
+                context.globalCompositeOperation = "destination-out";
+                context.beginPath();
                 radius = (lWidth/2) > 5? (lWidth/2) : 5;
-                ctx.arc(x,y,radius,0,2*Math.PI);
-                ctx.clip();
-                ctx.clearRect(0,0,canvas.width,canvas.height);
-                ctx.restore();
+                context.arc(x,y,radius,0,2*Math.PI);
+                context.clip();
+                context.clearRect(0,0,canvas.width,canvas.height);
+                context.restore();
             }else{
                 console.log(2)
                 var newPoint = {'x':x,'y':y};
@@ -182,14 +106,14 @@ function listenToUser() {
             let x = e.clientX;
             let y = e.clientY;
             if(eraserEnabled){//要使用eraser
-                ctx.save();
-                ctx.globalCompositeOperation = "destination-out";
-                ctx.beginPath();
+                context.save();
+                context.globalCompositeOperation = "destination-out";
+                context.beginPath();
                 radius = (lWidth/2) > 5? (lWidth/2) : 5;
-                ctx.arc(x,y,radius,0,2*Math.PI);
-                ctx.clip();
-                ctx.clearRect(0,0,canvas.width,canvas.height);
-                ctx.restore();
+                context.arc(x,y,radius,0,2*Math.PI);
+                context.clip();
+                context.clearRect(0,0,canvas.width,canvas.height);
+                context.restore();
             }else{
                 lastPoint = {'x':x,'y':y}
             }
@@ -201,15 +125,15 @@ function listenToUser() {
             let y = e.clientY;
             if(!painting){return}
             if(eraserEnabled){
-                ctx.save();
-                ctx.globalCompositeOperation = "destination-out";
-                ctx.beginPath();
+                context.save();
+                context.globalCompositeOperation = "destination-out";
+                context.beginPath();
                 
                 radius = (lWidth/2) > 5? (lWidth/2) : 5;
-                ctx.arc(x,y,radius,0,2*Math.PI);
-                ctx.clip();
-                ctx.clearRect(0,0,canvas.width,canvas.height);
-                ctx.restore();
+                context.arc(x,y,radius,0,2*Math.PI);
+                context.clip();
+                context.clearRect(0,0,canvas.width,canvas.height);
+                context.restore();
             }else{
                 var newPoint = {'x':x,'y':y};
                 drawLine(lastPoint.x, lastPoint.y,newPoint.x, newPoint.y);
@@ -228,39 +152,20 @@ function listenToUser() {
     
 }
 
-// 画点函数
-
-function drawCircle(x,y,radius){
-    // 保存默认的状态
-    ctx.save();
-    // 新建一条路径，生成之后，图形绘制命令被指向到路径上生成路径。
-    ctx.beginPath();
-    // 画一个以（x,y）为圆心的以radius为半径的圆弧（圆），
-    // 从startAngle开始到endAngle结束，按照anticlockwise给定的方向（默认为顺时针）来生成。
-    ctx.arc(x,y,radius,0,Math.PI*2);
-    // 通过填充路径的内容区域生成实心的图形
-    ctx.fill();
-    // 闭合路径之后图形绘制命令又重新指向到上下文中。
-    ctx.closePath();
-}
-
+// 画线函数
 function drawLine(x1,y1,x2,y2){
-    ctx.beginPath();
-    // 设置线条宽度
-    ctx.lineWidth = lWidth;
-    // ctx.strokeStyle = strokeColor;
-    // ctx.globalAlpha = opacity;
+    context.beginPath();
+    context.lineWidth = lWidth;
+    // context.strokeStyle = strokeColor;
+    // context.globalAlpha = opacity;
     // 设置线条末端样式。
-    ctx.lineCap = "round";
+    context.lineCap = "round";
     // 设定线条与线条间接合处的样式
-    ctx.lineJoin = "round";
-    // moveTo(x,y)将笔触移动到指定的坐标x以及y上
-    ctx.moveTo(x1,y1);
-    // lineTo(x, y) 绘制一条从当前位置到指定x以及y位置的直线
-    ctx.lineTo(x2,y2);
-    // 通过线条来绘制图形轮廓
-    ctx.stroke();
-    ctx.closePath();
+    context.lineJoin = "round";
+    context.moveTo(x1,y1);
+    context.lineTo(x2,y2);
+    context.stroke();
+    context.closePath();
 }
 
 // 点击橡皮檫
@@ -286,7 +191,7 @@ brush.onclick = function(){
 
 // 实现清屏
 reSetCanvas.onclick = function(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
+    context.clearRect(0,0,canvas.width,canvas.height);
     setCanvasBg('white');
     canvasHistory = [];
     undo.classList.remove('active');
@@ -295,8 +200,8 @@ reSetCanvas.onclick = function(){
 
 // 重新设置canvas背景颜色
 function setCanvasBg(color) {
-    ctx.fillStyle = color;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = color;
+    context.fillRect(0, 0, canvas.width, canvas.height);
 }
 
 // 下载图片
@@ -310,6 +215,64 @@ save.onclick = function(){
     saveA.click();
 }
 
+
+// 实现了切换背景颜色
+for (let i = 0; i < bgcolorBtn.length; i++) {
+    bgcolorBtn[i].onclick = function (e) {
+        e.stopPropagation();
+        for (let i = 0; i < bgcolorBtn.length; i++) {
+            bgcolorBtn[i].classList.remove("active");
+            this.classList.add("active");
+            activeBgColor = this.style.backgroundColor;
+            setCanvasBg(activeBgColor);
+        }
+
+    }
+}
+document.onclick = function(){
+    bgGroup.classList.remove('active');
+}
+
+selectBg.onclick = function(e){
+    bgGroup.classList.add('active');
+    e.stopPropagation();
+}
+
+// 实现改变画笔粗细的功能 1-20 放大的倍数 1 10 实际大小呢？ 2-20
+
+range1.onchange = function(){
+    thickness.style.transform = 'scale('+ (parseInt(range1.value)) +')';
+    lWidth = parseInt(range1.value*2);
+}
+
+range2.onchange = function(){
+    opacity = 1 - parseInt(this.value)/10;
+    if(opacity !== 0){
+        showOpacity.style.opacity = opacity;
+    }  
+}
+
+// 改变画笔颜色
+getColor();
+
+function getColor(){
+    for (let i = 0; i < aColorBtn.length; i++) {
+        aColorBtn[i].onclick = function (e) {
+            // e.stopPropagation();
+            for (let i = 0; i < aColorBtn.length; i++) {
+                aColorBtn[i].classList.remove("active");
+                this.classList.add("active");
+                activeColor = this.style.backgroundColor;
+                context.fillStyle = activeColor;
+                context.strokeStyle = activeColor;
+            }
+            penDetail.classList.remove('active');
+            ifPop = false;
+        }
+    }
+}
+
+// 实现撤销和重做的功能
 let canvasHistory = [];
 let step = -1;
 
@@ -324,9 +287,6 @@ function canvasDraw(){
     if(step > 0){
         undo.classList.add('active');
     }
-    /* if(step > 1){
-        redo.classList.add('active');
-    } */
 }
 
 // 撤销方法
@@ -335,7 +295,7 @@ function canvasUndo(){
         step--;
         let canvasPic = new Image();
         canvasPic.src = canvasHistory[step];
-        canvasPic.onload = function () { ctx.drawImage(canvasPic, 0, 0); }
+        canvasPic.onload = function () { context.drawImage(canvasPic, 0, 0); }
         undo.classList.add('active');
         redo.classList.add('active');
     }else{
@@ -350,7 +310,7 @@ function canvasRedo(){
         let canvasPic = new Image();
         canvasPic.src = canvasHistory[step];
         canvasPic.onload = function () { 
-            ctx.drawImage(canvasPic, 0, 0);
+            context.drawImage(canvasPic, 0, 0);
         }
         // redo.classList.add('active');
     }else {
@@ -366,8 +326,37 @@ redo.onclick = function(){
 }
 
 
-/* 对canvas中特定元素的旋转平移等操作实际上是对整个画布进行了操作，
-所以如果不对canvas进行save以及restore，那么每一次绘图都会在上一次的基础上进行操作，
-最后导致错位。比如说你相对于起始点每次30度递增旋转，30，60，90.
-如果不使用save 以及 restore 就会变成30, 90, 150，每一次在前一次基础上进行了旋转。
-save是入栈，restore是出栈。 */
+
+for (let index = 0; index < closeBtn.length; index++) {
+    closeBtn[index].onclick = function(e){
+        let btnParent = e.target.parentElement;
+        btnParent.classList.remove('active');
+    }
+    
+}
+
+window.onbeforeunload = function(){
+    return "Reload site?";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
