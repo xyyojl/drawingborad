@@ -130,55 +130,102 @@ function listenToUser() {
     let painting = false;
     // 记录画笔最后一次的位置
     let lastPoint = {x: undefined, y: undefined};
+    // console.log(document.body.ontouchstart)
 
-    // 鼠标按下事件
-    canvas.onmousedown = function(e){
-        /* this.firstDot = ctx.getImageData(0, 0, canvas.width, canvas.height);//在这里储存绘图表面
-        saveData(this.firstDot); */
-        painting = true;
-        let x = e.clientX;
-        let y = e.clientY;
-        if(eraserEnabled){//要使用eraser
-            ctx.save();
-            ctx.globalCompositeOperation = "destination-out";
-            ctx.beginPath();
-            radius = (lWidth/2) > 5? (lWidth/2) : 5;
-            ctx.arc(x,y,radius,0,2*Math.PI);
-            ctx.clip();
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            ctx.restore();
-        }else{
-            lastPoint = {'x':x,'y':y}
+    if(document.body.ontouchstart !== undefined){
+        canvas.ontouchstart = function (e) {
+            console.log(1)
+            painting = true;
+            let x = e.touches[0].clientX;
+            let y = e.touches[0].clientY;
+            if(eraserEnabled){//要使用eraser
+                ctx.save();
+                ctx.globalCompositeOperation = "destination-out";
+                ctx.beginPath();
+                radius = (lWidth/2) > 5? (lWidth/2) : 5;
+                ctx.arc(x,y,radius,0,2*Math.PI);
+                ctx.clip();
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                ctx.restore();
+            }else{
+                lastPoint = {'x':x,'y':y}
+            }
+        };
+        canvas.ontouchmove = function (e) {
+            let x = e.touches[0].clientX;
+            let y = e.touches[0].clientY;
+            if(!painting){return}
+            if(eraserEnabled){
+                ctx.save();
+                ctx.globalCompositeOperation = "destination-out";
+                ctx.beginPath();
+                radius = (lWidth/2) > 5? (lWidth/2) : 5;
+                ctx.arc(x,y,radius,0,2*Math.PI);
+                ctx.clip();
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                ctx.restore();
+            }else{
+                console.log(2)
+                var newPoint = {'x':x,'y':y};
+                drawLine(lastPoint.x, lastPoint.y,newPoint.x, newPoint.y);
+                lastPoint = newPoint;
+            }  
+        };
+
+        canvas.ontouchend = function () {
+            painting = false;
+        }
+    }else{
+        // 鼠标按下事件
+        canvas.onmousedown = function(e){
+            painting = true;
+            let x = e.clientX;
+            let y = e.clientY;
+            if(eraserEnabled){//要使用eraser
+                ctx.save();
+                ctx.globalCompositeOperation = "destination-out";
+                ctx.beginPath();
+                radius = (lWidth/2) > 5? (lWidth/2) : 5;
+                ctx.arc(x,y,radius,0,2*Math.PI);
+                ctx.clip();
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                ctx.restore();
+            }else{
+                lastPoint = {'x':x,'y':y}
+            }
+        }
+
+        // 鼠标移动事件
+        canvas.onmousemove = function(e){
+            let x = e.clientX;
+            let y = e.clientY;
+            if(!painting){return}
+            if(eraserEnabled){
+                ctx.save();
+                ctx.globalCompositeOperation = "destination-out";
+                ctx.beginPath();
+                
+                radius = (lWidth/2) > 5? (lWidth/2) : 5;
+                ctx.arc(x,y,radius,0,2*Math.PI);
+                ctx.clip();
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                ctx.restore();
+            }else{
+                var newPoint = {'x':x,'y':y};
+                drawLine(lastPoint.x, lastPoint.y,newPoint.x, newPoint.y);
+                lastPoint = newPoint;
+            }  
+        }
+
+        // 鼠标松开事件
+        canvas.onmouseup = function(){
+            painting = false;
+            canvasDraw();
         }
     }
 
-    // 鼠标移动事件
-    canvas.onmousemove = function(e){
-        let x = e.clientX;
-        let y = e.clientY;
-        if(!painting){return}
-        if(eraserEnabled){
-            ctx.save();
-            ctx.globalCompositeOperation = "destination-out";
-            ctx.beginPath();
-            
-            radius = (lWidth/2) > 5? (lWidth/2) : 5;
-            ctx.arc(x,y,radius,0,2*Math.PI);
-            ctx.clip();
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            ctx.restore();
-        }else{
-            var newPoint = {'x':x,'y':y};
-            drawLine(lastPoint.x, lastPoint.y,newPoint.x, newPoint.y);
-            lastPoint = newPoint;
-        }  
-    }
 
-    // 鼠标松开事件
-    canvas.onmouseup = function(){
-        painting = false;
-        canvasDraw();
-    }
+    
 }
 
 // 画点函数

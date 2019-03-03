@@ -278,3 +278,16 @@ canvas{
     display: block;
     background: #fff;
 }
+
+
+@media screen and (max-width: 768px) {
+    .color-group{
+        top: 80px;
+    }
+    .tools{
+        bottom: 15px;
+    }
+    .pen-detail{
+        bottom: 80px;
+    }
+}
