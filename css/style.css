@@ -73,6 +73,14 @@ li{list-style: none;}
 .tools button.redo{
     background-image: url('../image/redo_sel.png'); 
 }
+.tools button.undo.active{
+    background-image: url('../image/undo.png');
+    border-color: transparent; 
+}
+.tools button.redo.active{
+    background-image: url('../image/redo.png'); 
+    border-color: transparent;
+}
 .tools button.active{
     border-radius: 5px;
     border-color: #1398E6;

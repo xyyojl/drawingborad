@@ -9,6 +9,9 @@ let bgGroup = document.querySelector('.color-group');
 let bgcolorBtn = document.querySelectorAll('.bgcolor-item');
 let penDetail = document.getElementById("penDetail");
 let aColorBtn = document.getElementsByClassName("color-item");
+let undo = document.getElementById("undo");
+let redo = document.getElementById("redo");
+
 
 let range1 = document.getElementById('range1');
 let range2 = document.getElementById('range2');
@@ -20,6 +23,11 @@ let lWidth = 2;
 let opacity = 1;
 let strokeColor = 'rgba(0,0,0,1)';
 let lineEnabled = false;
+let radius = 5;
+
+window.onbeforeunload = function(){
+    return "Reload site?";
+};
 
 // 实现了切换背景颜色
 for (let i = 0; i < bgcolorBtn.length; i++) {
@@ -53,7 +61,6 @@ range1.onchange = function(){
     thickness.style.transform = 'scale('+ (parseInt(range1.value)) +')';
     console.log(thickness.style.transform )
     lWidth = parseInt(range1.value*2);
-    // console.log(penWidth.width)
 }
 
 range2.onchange = function(){
@@ -117,6 +124,8 @@ function listenToUser() {
 
     // 鼠标按下事件
     canvas.onmousedown = function(e){
+        /* this.firstDot = ctx.getImageData(0, 0, canvas.width, canvas.height);//在这里储存绘图表面
+        saveData(this.firstDot); */
         painting = true;
         let x = e.clientX;
         let y = e.clientY;
@@ -124,7 +133,8 @@ function listenToUser() {
             ctx.save();
             ctx.globalCompositeOperation = "destination-out";
             ctx.beginPath();
-            ctx.arc(x,y,lWidth/2,0,2*Math.PI);
+            radius = (lWidth/2) > 5? (lWidth/2) : 5;
+            ctx.arc(x,y,radius,0,2*Math.PI);
             ctx.clip();
             ctx.clearRect(0,0,canvas.width,canvas.height);
             ctx.restore();
@@ -142,7 +152,9 @@ function listenToUser() {
             ctx.save();
             ctx.globalCompositeOperation = "destination-out";
             ctx.beginPath();
-            ctx.arc(x,y,lWidth/2,0,2*Math.PI);
+            
+            radius = (lWidth/2) > 5? (lWidth/2) : 5;
+            ctx.arc(x,y,radius,0,2*Math.PI);
             ctx.clip();
             ctx.clearRect(0,0,canvas.width,canvas.height);
             ctx.restore();
@@ -156,6 +168,7 @@ function listenToUser() {
     // 鼠标松开事件
     canvas.onmouseup = function(){
         painting = false;
+        canvasDraw();
     }
 }
 
@@ -238,7 +251,55 @@ save.onclick = function(){
     saveA.click();
 }
 
+let canvasHistory = [];
+let step = -1;
 
+// 绘制方法
+function canvasDraw(){
+    step++;
+    if(step < canvasHistory.length){
+        canvasHistory.length = step;  // 截断数组
+    }
+    // 添加新的绘制到历史记录
+    canvasHistory.push(canvas.toDataURL());
+}
+
+// 撤销方法
+function canvasUndo(){
+    if(step > 0){
+        step--;
+        // ctx.clearRect(0,0,canvas.width,canvas.height);
+        let canvasPic = new Image();
+        canvasPic.src = canvasHistory[step];
+        canvasPic.onload = function () { ctx.drawImage(canvasPic, 0, 0); }
+        undo.classList.add('active');
+    }else{
+        undo.classList.remove('active');
+        alert('不能再继续撤销了');
+    }
+}
+// 重做方法
+function canvasRedo(){
+    if(step < canvasHistory.length - 1){
+        step++;
+        let canvasPic = new Image();
+        canvasPic.src = canvasHistory[step];
+        canvasPic.onload = function () { 
+            // ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.drawImage(canvasPic, 0, 0);
+        }
+        redo.classList.add('active');
+    }else {
+        redo.classList.remove('active')
+        alert('已经是最新的记录了');
+    }
+}
+undo.onclick = function(){
+    canvasUndo();
+}
+redo.onclick = function(){
+    canvasRedo();
+}
 
 
 /* 对canvas中特定元素的旋转平移等操作实际上是对整个画布进行了操作，
