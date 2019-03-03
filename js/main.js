@@ -19,6 +19,7 @@ let ifPop = false;
 let lWidth = 2;
 let opacity = 1;
 let strokeColor = 'rgba(0,0,0,1)';
+let lineEnabled = false;
 
 // 实现了切换背景颜色
 for (let i = 0; i < bgcolorBtn.length; i++) {
@@ -35,6 +36,7 @@ for (let i = 0; i < bgcolorBtn.length; i++) {
 }
 document.onclick = function(){
     bgGroup.classList.remove('active');
+    // penDetail.classList.remove('active');
 }
 
 
@@ -77,7 +79,8 @@ getColor();
 
 function getColor(){
     for (let i = 0; i < aColorBtn.length; i++) {
-        aColorBtn[i].onclick = function () {
+        aColorBtn[i].onclick = function (e) {
+            e.stopPropagation();
             for (let i = 0; i < aColorBtn.length; i++) {
                 aColorBtn[i].classList.remove("active");
                 this.classList.add("active");
@@ -85,6 +88,8 @@ function getColor(){
                 ctx.fillStyle = activeColor;
                 ctx.strokeStyle = activeColor;
             }
+            penDetail.classList.remove('active');
+            ifPop = false;
         }
     }
 }
@@ -119,7 +124,7 @@ function listenToUser() {
             ctx.save();
             ctx.globalCompositeOperation = "destination-out";
             ctx.beginPath();
-            ctx.arc(x,y,5,0,2*Math.PI);
+            ctx.arc(x,y,lWidth/2,0,2*Math.PI);
             ctx.clip();
             ctx.clearRect(0,0,canvas.width,canvas.height);
             ctx.restore();
@@ -137,7 +142,7 @@ function listenToUser() {
             ctx.save();
             ctx.globalCompositeOperation = "destination-out";
             ctx.beginPath();
-            ctx.arc(x,y,5,0,2*Math.PI);
+            ctx.arc(x,y,lWidth/2,0,2*Math.PI);
             ctx.clip();
             ctx.clearRect(0,0,canvas.width,canvas.height);
             ctx.restore();
