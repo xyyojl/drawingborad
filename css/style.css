@@ -94,10 +94,19 @@ li{list-style: none;}
     margin-left: -161px;
     width: 322px;
     padding: 16px;
-    /* margin:  0 auto; */
     border-radius: 5px;
     box-shadow: 0 1px 4px 0 rgba(32,33,36,0.28);
     background-color: #fff;
+}
+.color-group .closeBtn,
+.pen-detail .closeBtn{
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    background: url('../image/close.png') center center no-repeat;
+    cursor: pointer;
 }
 .color-group.active{
     display: block;
@@ -136,7 +145,7 @@ li{list-style: none;}
     margin-left: -140px;
     bottom: 90px;
     width: 280px;
-    height: 280px;
+    height: 210px;
     padding: 20px 24px;
     border: 1px solid #81A4BD;
     border-radius: 5px;
@@ -262,8 +271,8 @@ input[type='range']::-webkit-slider-thumb {
     height: 26px;
     background: #000;
     border-radius: 50%;
-    margin-right: 6px;
-    margin-left: 2px;
+    margin-right: 4px;
+    margin-left: 4px;
 }
 canvas{
     display: block;

@@ -16,14 +16,23 @@ let redo = document.getElementById("redo");
 let range1 = document.getElementById('range1');
 let range2 = document.getElementById('range2');
 let showOpacity = document.querySelector('.showOpacity');
+let closeBtn = document.querySelectorAll('.closeBtn');
 let eraserEnabled = false;
 let activeBgColor = '#fff';
 let ifPop = false;
 let lWidth = 2;
 let opacity = 1;
 let strokeColor = 'rgba(0,0,0,1)';
-let lineEnabled = false;
 let radius = 5;
+
+
+for (let index = 0; index < closeBtn.length; index++) {
+    closeBtn[index].onclick = function(e){
+        let btnParent = e.target.parentElement;
+        btnParent.classList.remove('active');
+    }
+    
+}
 
 window.onbeforeunload = function(){
     return "Reload site?";
@@ -232,6 +241,9 @@ brush.onclick = function(){
 reSetCanvas.onclick = function(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
     setCanvasBg('white');
+    canvasHistory = [];
+    undo.classList.remove('active');
+    redo.classList.remove('active');
 }
 
 // 重新设置canvas背景颜色
@@ -262,17 +274,23 @@ function canvasDraw(){
     }
     // 添加新的绘制到历史记录
     canvasHistory.push(canvas.toDataURL());
+    if(step > 0){
+        undo.classList.add('active');
+    }
+    /* if(step > 1){
+        redo.classList.add('active');
+    } */
 }
 
 // 撤销方法
 function canvasUndo(){
     if(step > 0){
         step--;
-        // ctx.clearRect(0,0,canvas.width,canvas.height);
         let canvasPic = new Image();
         canvasPic.src = canvasHistory[step];
         canvasPic.onload = function () { ctx.drawImage(canvasPic, 0, 0); }
         undo.classList.add('active');
+        redo.classList.add('active');
     }else{
         undo.classList.remove('active');
         alert('不能再继续撤销了');
@@ -285,10 +303,9 @@ function canvasRedo(){
         let canvasPic = new Image();
         canvasPic.src = canvasHistory[step];
         canvasPic.onload = function () { 
-            // ctx.clearRect(0,0,canvas.width,canvas.height);
             ctx.drawImage(canvasPic, 0, 0);
         }
-        redo.classList.add('active');
+        // redo.classList.add('active');
     }else {
         redo.classList.remove('active')
         alert('已经是最新的记录了');
