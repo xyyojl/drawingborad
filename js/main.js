@@ -38,12 +38,16 @@ listenToUser();
 function autoSetSize(){
     canvasSetSize();
     function canvasSetSize(){
+        // 把变化之前的画布内容copy一份，然后重新画到画布上
+        let imgData = context.getImageData(0,0,canvas.width,canvas.height);
         let pageWidth = document.documentElement.clientWidth;
         let pageHeight = document.documentElement.clientHeight;
         
         canvas.width = pageWidth;
         canvas.height = pageHeight;
+        context.putImageData(imgData,0,0);
     }
+    
     window.onresize = function(){
         canvasSetSize();
     }
