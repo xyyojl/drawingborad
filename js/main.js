@@ -80,8 +80,8 @@ function listenToUser() {
             }
         };
         canvas.ontouchmove = function (e) {
-            let x1 = lastPoint['x1'];
-            let y1 = lastPoint['y1'];
+            let x1 = lastPoint['x'];
+            let y1 = lastPoint['y'];
             let x2 = e.touches[0].clientX;
             let y2 = e.touches[0].clientY;
             if(!painting){return}
