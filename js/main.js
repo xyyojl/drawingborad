@@ -74,6 +74,7 @@ function listenToUser() {
                 context.clip();
                 context.clearRect(0,0,canvas.width,canvas.height);
                 context.restore();
+                lastPoint = {'x': x1,'y': y1}
             }else{
                 lastPoint = {'x': x1,'y': y1}
             }
@@ -85,51 +86,10 @@ function listenToUser() {
             let y2 = e.touches[0].clientY;
             if(!painting){return}
             if(eraserEnabled){
-                /* context.save();
-                context.globalCompositeOperation = "destination-out";
-                context.beginPath();
-                radius = (lWidth/2) > 5? (lWidth/2) : 5;
-                context.arc(x,y,radius,0,2*Math.PI);
-                context.clip();
-                context.clearRect(0,0,canvas.width,canvas.height);
-                context.restore(); */
-                var asin = radius*Math.sin(Math.atan((y2-y1)/(x2-x1)));
-                var acos = radius*Math.cos(Math.atan((y2-y1)/(x2-x1)))
-                var x3 = x1+asin;
-                var y3 = y1-acos;
-                var x4 = x1-asin;
-                var y4 = y1+acos;
-                var x5 = x2+asin;
-                var y5 = y2-acos;
-                var x6 = x2-asin;
-                var y6 = y2+acos;
-                
-        　　　　//保证线条的连贯，所以在矩形一端画圆
-                context.save()
-                context.beginPath()
-                // context.arc(x2,y2,a,0,2*Math.PI);
-                radius = (lWidth/2) > 5? (lWidth/2) : 5;
-                context.arc(x2,y2,radius,0,2*Math.PI);
-                context.clip()
-                context.clearRect(0,0,canvas.width,canvas.height);
-                context.restore();
-            
-        　　　　//清除矩形剪辑区域里的像素
-                context.save()
-                context.beginPath()
-                context.moveTo(x3,y3);
-                context.lineTo(x5,y5);
-                context.lineTo(x6,y6);
-                context.lineTo(x4,y4);
-                context.closePath();
-                context.clip();
-                context.clearRect(0,0,canvas.width,canvas.height);
-                context.restore();
-
-                //记录最后坐标，到底需不要
+                moveHandler(x1,y1,x2,y2);
+                //记录最后坐标
                 lastPoint['x'] = x2;
                 lastPoint['y'] = y2;
-
             }else{
                 let newPoint = {'x': x2,'y': y2};
                 drawLine(lastPoint.x, lastPoint.y,newPoint.x, newPoint.y);
@@ -157,6 +117,7 @@ function listenToUser() {
                 context.clip();
                 context.clearRect(0,0,canvas.width,canvas.height);
                 context.restore();
+                lastPoint = {'x': x1,'y': y1}
             }else{
                 lastPoint = {'x': x1,'y': y1}
             }
@@ -170,49 +131,7 @@ function listenToUser() {
             let y2 = e.clientY;
             if(!painting){return}
             if(eraserEnabled){
-                /* context.save();
-                context.globalCompositeOperation = "destination-out";
-                context.beginPath();
-                
-                radius = (lWidth/2) > 5? (lWidth/2) : 5;
-                context.arc(x,y,radius,0,2*Math.PI);
-                context.clip();
-                context.clearRect(0,0,canvas.width,canvas.height);
-                context.restore(); */
-                //获取两个点之间的剪辑区域四个端点
-                var asin = radius*Math.sin(Math.atan((y2-y1)/(x2-x1)));
-                var acos = radius*Math.cos(Math.atan((y2-y1)/(x2-x1)))
-                var x3 = x1+asin;
-                var y3 = y1-acos;
-                var x4 = x1-asin;
-                var y4 = y1+acos;
-                var x5 = x2+asin;
-                var y5 = y2-acos;
-                var x6 = x2-asin;
-                var y6 = y2+acos;
-                
-        　　　　//保证线条的连贯，所以在矩形一端画圆
-                context.save()
-                context.beginPath()
-                // context.arc(x2,y2,a,0,2*Math.PI);
-                radius = (lWidth/2) > 5? (lWidth/2) : 5;
-                context.arc(x2,y2,radius,0,2*Math.PI);
-                context.clip()
-                context.clearRect(0,0,canvas.width,canvas.height);
-                context.restore();
-            
-        　　　　//清除矩形剪辑区域里的像素
-                context.save()
-                context.beginPath()
-                context.moveTo(x3,y3);
-                context.lineTo(x5,y5);
-                context.lineTo(x6,y6);
-                context.lineTo(x4,y4);
-                context.closePath();
-                context.clip();
-                context.clearRect(0,0,canvas.width,canvas.height);
-                context.restore();
-
+                moveHandler(x1,y1,x2,y2);
                 //记录最后坐标
                 lastPoint['x'] = x2;
                 lastPoint['y'] = y2;
@@ -233,6 +152,43 @@ function listenToUser() {
 
     
 }
+
+// 
+function moveHandler(x1,y1,x2,y2){
+    //获取两个点之间的剪辑区域四个端点
+    var asin = radius*Math.sin(Math.atan((y2-y1)/(x2-x1)));
+    var acos = radius*Math.cos(Math.atan((y2-y1)/(x2-x1)))
+    var x3 = x1+asin;
+    var y3 = y1-acos;
+    var x4 = x1-asin;
+    var y4 = y1+acos;
+    var x5 = x2+asin;
+    var y5 = y2-acos;
+    var x6 = x2-asin;
+    var y6 = y2+acos;
+    
+　　//保证线条的连贯，所以在矩形一端画圆
+    context.save()
+    context.beginPath()
+    radius = (lWidth/2) > 5? (lWidth/2) : 5;
+    context.arc(x2,y2,radius,0,2*Math.PI);
+    context.clip()
+    context.clearRect(0,0,canvas.width,canvas.height);
+    context.restore();
+
+　　//清除矩形剪辑区域里的像素
+    context.save()
+    context.beginPath()
+    context.moveTo(x3,y3);
+    context.lineTo(x5,y5);
+    context.lineTo(x6,y6);
+    context.lineTo(x4,y4);
+    context.closePath();
+    context.clip();
+    context.clearRect(0,0,canvas.width,canvas.height);
+    context.restore();
+}
+
 
 // 画线函数
 function drawLine(x1,y1,x2,y2){
@@ -263,7 +219,6 @@ brush.onclick = function(){
     eraser.classList.remove('active');
     if(!ifPop){
         // 弹出框
-        console.log('弹一弹')
         penDetail.classList.add('active');
     }else{
         penDetail.classList.remove('active');
