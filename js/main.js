@@ -70,7 +70,7 @@ function listenToUser() {
                 context.globalCompositeOperation = "destination-out";
                 context.beginPath();
                 radius = (lWidth/2) > 5? (lWidth/2) : 5;
-                context.arc(x,y,radius,0,2*Math.PI);
+                context.arc(x1,y1,radius,0,2*Math.PI);
                 context.clip();
                 context.clearRect(0,0,canvas.width,canvas.height);
                 context.restore();
