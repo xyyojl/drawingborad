@@ -47,7 +47,7 @@ function autoSetSize(){
         canvas.height = pageHeight;
         context.putImageData(imgData,0,0);
     }
-    
+
     window.onresize = function(){
         canvasSetSize();
     }
@@ -62,10 +62,9 @@ function listenToUser() {
 
     if(document.body.ontouchstart !== undefined){
         canvas.ontouchstart = function (e) {
-            console.log(1)
             painting = true;
-            let x = e.touches[0].clientX;
-            let y = e.touches[0].clientY;
+            let x1 = e.touches[0].clientX;
+            let y1 = e.touches[0].clientY;
             if(eraserEnabled){//要使用eraser
                 context.save();
                 context.globalCompositeOperation = "destination-out";
@@ -76,25 +75,63 @@ function listenToUser() {
                 context.clearRect(0,0,canvas.width,canvas.height);
                 context.restore();
             }else{
-                lastPoint = {'x':x,'y':y}
+                lastPoint = {'x': x1,'y': y1}
             }
         };
         canvas.ontouchmove = function (e) {
-            let x = e.touches[0].clientX;
-            let y = e.touches[0].clientY;
+            let x1 = lastPoint['x1'];
+            let y1 = lastPoint['y1'];
+            let x2 = e.touches[0].clientX;
+            let y2 = e.touches[0].clientY;
             if(!painting){return}
             if(eraserEnabled){
-                context.save();
+                /* context.save();
                 context.globalCompositeOperation = "destination-out";
                 context.beginPath();
                 radius = (lWidth/2) > 5? (lWidth/2) : 5;
                 context.arc(x,y,radius,0,2*Math.PI);
                 context.clip();
                 context.clearRect(0,0,canvas.width,canvas.height);
+                context.restore(); */
+                var asin = radius*Math.sin(Math.atan((y2-y1)/(x2-x1)));
+                var acos = radius*Math.cos(Math.atan((y2-y1)/(x2-x1)))
+                var x3 = x1+asin;
+                var y3 = y1-acos;
+                var x4 = x1-asin;
+                var y4 = y1+acos;
+                var x5 = x2+asin;
+                var y5 = y2-acos;
+                var x6 = x2-asin;
+                var y6 = y2+acos;
+                
+        　　　　//保证线条的连贯，所以在矩形一端画圆
+                context.save()
+                context.beginPath()
+                // context.arc(x2,y2,a,0,2*Math.PI);
+                radius = (lWidth/2) > 5? (lWidth/2) : 5;
+                context.arc(x2,y2,radius,0,2*Math.PI);
+                context.clip()
+                context.clearRect(0,0,canvas.width,canvas.height);
                 context.restore();
+            
+        　　　　//清除矩形剪辑区域里的像素
+                context.save()
+                context.beginPath()
+                context.moveTo(x3,y3);
+                context.lineTo(x5,y5);
+                context.lineTo(x6,y6);
+                context.lineTo(x4,y4);
+                context.closePath();
+                context.clip();
+                context.clearRect(0,0,canvas.width,canvas.height);
+                context.restore();
+
+                //记录最后坐标，到底需不要
+                lastPoint['x'] = x2;
+                lastPoint['y'] = y2;
+
             }else{
-                console.log(2)
-                var newPoint = {'x':x,'y':y};
+                let newPoint = {'x': x2,'y': y2};
                 drawLine(lastPoint.x, lastPoint.y,newPoint.x, newPoint.y);
                 lastPoint = newPoint;
             }  
@@ -102,34 +139,38 @@ function listenToUser() {
 
         canvas.ontouchend = function () {
             painting = false;
+            canvasDraw();
         }
     }else{
         // 鼠标按下事件
         canvas.onmousedown = function(e){
             painting = true;
-            let x = e.clientX;
-            let y = e.clientY;
+            let x1 = e.clientX;
+            let y1 = e.clientY;
             if(eraserEnabled){//要使用eraser
+                //鼠标第一次点下的时候擦除一个圆形区域，同时记录第一个坐标点
                 context.save();
                 context.globalCompositeOperation = "destination-out";
                 context.beginPath();
                 radius = (lWidth/2) > 5? (lWidth/2) : 5;
-                context.arc(x,y,radius,0,2*Math.PI);
+                context.arc(x1,y1,radius,0,2*Math.PI);
                 context.clip();
                 context.clearRect(0,0,canvas.width,canvas.height);
                 context.restore();
             }else{
-                lastPoint = {'x':x,'y':y}
+                lastPoint = {'x': x1,'y': y1}
             }
         }
 
         // 鼠标移动事件
         canvas.onmousemove = function(e){
-            let x = e.clientX;
-            let y = e.clientY;
+            let x1 = lastPoint['x'];
+            let y1 = lastPoint['y'];
+            let x2 = e.clientX;
+            let y2 = e.clientY;
             if(!painting){return}
             if(eraserEnabled){
-                context.save();
+                /* context.save();
                 context.globalCompositeOperation = "destination-out";
                 context.beginPath();
                 
@@ -137,9 +178,46 @@ function listenToUser() {
                 context.arc(x,y,radius,0,2*Math.PI);
                 context.clip();
                 context.clearRect(0,0,canvas.width,canvas.height);
+                context.restore(); */
+                //获取两个点之间的剪辑区域四个端点
+                var asin = radius*Math.sin(Math.atan((y2-y1)/(x2-x1)));
+                var acos = radius*Math.cos(Math.atan((y2-y1)/(x2-x1)))
+                var x3 = x1+asin;
+                var y3 = y1-acos;
+                var x4 = x1-asin;
+                var y4 = y1+acos;
+                var x5 = x2+asin;
+                var y5 = y2-acos;
+                var x6 = x2-asin;
+                var y6 = y2+acos;
+                
+        　　　　//保证线条的连贯，所以在矩形一端画圆
+                context.save()
+                context.beginPath()
+                // context.arc(x2,y2,a,0,2*Math.PI);
+                radius = (lWidth/2) > 5? (lWidth/2) : 5;
+                context.arc(x2,y2,radius,0,2*Math.PI);
+                context.clip()
+                context.clearRect(0,0,canvas.width,canvas.height);
                 context.restore();
+            
+        　　　　//清除矩形剪辑区域里的像素
+                context.save()
+                context.beginPath()
+                context.moveTo(x3,y3);
+                context.lineTo(x5,y5);
+                context.lineTo(x6,y6);
+                context.lineTo(x4,y4);
+                context.closePath();
+                context.clip();
+                context.clearRect(0,0,canvas.width,canvas.height);
+                context.restore();
+
+                //记录最后坐标
+                lastPoint['x'] = x2;
+                lastPoint['y'] = y2;
             }else{
-                var newPoint = {'x':x,'y':y};
+                let newPoint = {'x': x2,'y': y2};
                 drawLine(lastPoint.x, lastPoint.y,newPoint.x, newPoint.y);
                 lastPoint = newPoint;
             }  
@@ -342,25 +420,3 @@ for (let index = 0; index < closeBtn.length; index++) {
 window.onbeforeunload = function(){
     return "Reload site?";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
