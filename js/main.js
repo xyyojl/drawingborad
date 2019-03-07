@@ -4,9 +4,9 @@ let eraser = document.getElementById('eraser');
 let brush = document.getElementById('brush');
 let reSetCanvas = document.getElementById("clear");
 let save = document.getElementById("save");
-let selectBg = document.querySelector('.bg-btn');
+/* let selectBg = document.querySelector('.bg-btn');
 let bgGroup = document.querySelector('.color-group');
-let bgcolorBtn = document.querySelectorAll('.bgcolor-item');
+let bgcolorBtn = document.querySelectorAll('.bgcolor-item'); */
 let penDetail = document.getElementById("penDetail");
 let aColorBtn = document.getElementsByClassName("color-item");
 let undo = document.getElementById("undo");
@@ -170,6 +170,7 @@ function moveHandler(x1,y1,x2,y2){
 　　//保证线条的连贯，所以在矩形一端画圆
     context.save()
     context.beginPath()
+    context.globalCompositeOperation = "destination-out";
     radius = (lWidth/2) > 5? (lWidth/2) : 5;
     context.arc(x2,y2,radius,0,2*Math.PI);
     context.clip()
@@ -179,6 +180,7 @@ function moveHandler(x1,y1,x2,y2){
 　　//清除矩形剪辑区域里的像素
     context.save()
     context.beginPath()
+    context.globalCompositeOperation = "destination-out";
     context.moveTo(x3,y3);
     context.lineTo(x5,y5);
     context.lineTo(x6,y6);
@@ -254,7 +256,7 @@ save.onclick = function(){
 
 
 // 实现了切换背景颜色
-for (let i = 0; i < bgcolorBtn.length; i++) {
+/* for (let i = 0; i < bgcolorBtn.length; i++) {
     bgcolorBtn[i].onclick = function (e) {
         e.stopPropagation();
         for (let i = 0; i < bgcolorBtn.length; i++) {
@@ -273,7 +275,7 @@ document.onclick = function(){
 selectBg.onclick = function(e){
     bgGroup.classList.add('active');
     e.stopPropagation();
-}
+} */
 
 // 实现改变画笔粗细的功能 1-20 放大的倍数 1 10 实际大小呢？ 2-20
 
