@@ -1,5 +1,3 @@
-# 手把手教你实现一个canvas智绘画板
-
 ## 前言
 
 本文主要介绍：
@@ -21,7 +19,7 @@
 - 实现任意选择画笔颜色、调整画笔粗细以及橡皮檫擦除等绘画功能
 - 实现在线画板的本地保存功能
 - 支持撤销和返回操作
-- 自定义背景颜色
+- ~~自定义背景颜色~~[这个功能尚未完善好]
 
 ## 二、项目效果展示
 
@@ -31,11 +29,13 @@
 
 PC端的预览图：
 
-![PC端](https://user-gold-cdn.xitu.io/2019/3/3/16944271120d4aca?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+
+![](https://user-gold-cdn.xitu.io/2019/3/3/16944271120d4aca?w=1366&h=664&f=png&s=13244)
 
 移动端的预览图：
 
-![移动端](https://user-gold-cdn.xitu.io/2019/3/3/169442736b704a5d?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+
+![](https://user-gold-cdn.xitu.io/2019/3/3/169442736b704a5d?w=248&h=443&f=png&s=6192)
 
 
 
@@ -58,7 +58,7 @@ PC端的预览图：
 - 清空画板
 - 将自己画的东西保存成图片
 - 进行撤销和重做操作
-- 切换画板背景颜色
+- ~~切换画板背景颜色~~
 - 兼容移动端（支持触摸） 
 
 ### （二）进行HTML布局
@@ -78,7 +78,8 @@ PC端的预览图：
 </head>
 <body>
     <canvas id="canvas"></canvas>
-    <div class="bg-btn"></div>
+    <!-- 自定义背景颜色功能尚未完善好 -->
+    <!--<div class="bg-btn"></div>
     <div class="color-group" id="bgGroup">
         <h3>选择背景颜色:</h3>
         <ul class="clearfix">
@@ -96,7 +97,7 @@ PC端的预览图：
             <li class="bgcolor-item" style="background-color: #029688;"></li>
         </ul>
         <i class="closeBtn"></i>
-    </div>
+    </div>-->
     <div class="tools">
         <div class="container">
             <button class="save"  id="save" title="保存"></button>
@@ -149,7 +150,7 @@ let canvas = document.getElementById('canvas');
 let context = canvas.getContext('2d');
 ```
 
-我打算把画板做成全屏的，所以接下来设置一下`canvas`的宽高 
+我打算把画板做成全屏的，所以接下来设置一下canvas的宽高 
 
 ```js
 let pageWidth = document.documentElement.clientWidth;
@@ -159,7 +160,7 @@ canvas.width = pageWidth;
 canvas.height = pageHeight;
 ```
 
-由于部分IE不支持`canvas`，如果要兼容IE，我们可以创建一个`canvas`，然后使用`excanvas`初始化，针对IE加上[exCanvas.js](http://code.google.com/p/explorercanvas/)，这里我们明确不考虑IE。 
+由于部分IE不支持canvas，如果要兼容IE，我们可以创建一个canvas，然后使用`excanvas`初始化，针对IE加上[exCanvas.js](http://code.google.com/p/explorercanvas/)，这里我们明确不考虑IE。 
 
 但是我在电脑上对浏览器的窗口进行改变，画板不会自适应的放缩。解决办法：
 
@@ -169,11 +170,14 @@ function autoSetSize(){
     canvasSetSize();
     // 当执行这个函数的时候，会先设置canvas的宽高
     function canvasSetSize(){
+        // 把变化之前的画布内容copy一份，然后重新画到画布上
+        let imgData = context.getImageData(0,0,canvas.width,canvas.height);
         let pageWidth = document.documentElement.clientWidth;
         let pageHeight = document.documentElement.clientHeight;
         
         canvas.width = pageWidth;
         canvas.height = pageHeight;
+        context.putImageData(imgData,0,0);
     }
     // 在窗口大小改变之后,就会触发resize事件，重新设置canvas的宽高
     window.onresize = function(){
@@ -264,9 +268,9 @@ function drawLine(x1,y1,x2,y2){
 1. 获取橡皮擦元素
 2. 设置橡皮擦初始状态，`eraserEnabled = false`。
 3. 监听橡皮擦`click`事件，点击橡皮擦，改变橡皮擦状态，`eraserEnabled = true`，并且切换class，实现**被激活**的效果。
-4. `eraserEnabled`为`true`时，移动鼠标用` context.clearRect()`实现了 橡皮檫。
+4. `eraserEnabled`为`true`，移动鼠标用`context.clearRect()`实现了橡皮檫。
 
-但是我发现canvas的API中，可以清除像素的就是clearRect方法，但是clearRect方法的清除区域矩形，毕竟大部分人的习惯中的橡皮擦都是圆形的，所以就引入了剪辑区域这个强大的功能，也就是clip方法。下面的代码是使用` context.clearRect()`实现了 橡皮檫。请看踩坑部分，了解如何更好的实现橡皮檫。
+但是我发现canvas的API中，可以清除像素的就是`clearRect`方法，但是`clearRect`方法的清除区域矩形，毕竟大部分人的习惯中的橡皮擦都是圆形的，所以就引入了剪辑区域这个强大的功能，也就是`clip`方法。下面的代码是使用`context.clearRect()`实现了 橡皮檫。请看踩坑部分，了解如何更好的实现橡皮檫。
 
 ```js
 let eraser = document.getElementById("eraser");
@@ -340,10 +344,10 @@ function setCanvasBg(color) {
 
 实现思路：
 
-1. 获取canvas.toDateURL
+1. 获取`canvas.toDateURL`
 2. 在页面里创建并插入一个a标签
-3. a标签href等于canvas.toDateURL，并添加download属性
-4. 点击保存按钮，a标签触发click事件
+3. a标签href等于`canvas.toDateURL`，并添加download属性
+4. 点击保存按钮，a标签触发`click`事件
 
 ```js
 let save = document.getElementById("save");
@@ -360,13 +364,13 @@ save.onclick = function(){
 }
 ```
 
-#### 6.实现改变背景颜色的功能 
+#### ~~6.实现改变背景颜色的功能~~ 
 
-实现思路：
+~~实现思路：~~
 
-1. 获取相应的元素节点。
-2. 给每一个class为bgcolor-item的标签添加点击事件，当点击事件触发时，改变背景颜色。
-3. 点击设置背景颜色的div之外的地方，实现隐藏那个div。
+1. ~~获取相应的元素节点。~~
+2. ~~给每一个class为bgcolor-item的标签添加点击事件，当点击事件触发时，改变背景颜色。~~
+3. ~~点击设置背景颜色的div之外的地方，实现隐藏那个div。~~
 
 ```js
 let selectBg = document.querySelector('.bg-btn');
@@ -407,7 +411,7 @@ selectBg.onclick = function(e){
 1. 实现让设置画笔的属性的对话框出现。
 2. 获取相应的元素节点。
 3. 当input=range的元素发生改变的时候，获取到的值赋值给lWidth。
-4. 然后设置context.lineWidth = lWidth。
+4. 然后设置`context.lineWidth = lWidth`。
 
 ```js
 let range1 = document.getElementById('range1');
@@ -481,6 +485,12 @@ function getColor(){
 ```js
 let undo = document.getElementById("undo");
 let redo = document.getElementById("redo");
+
+// ...
+canvas.ontouchend = function () {
+        painting = false;
+        canvasDraw();
+}
 
 // ...
 canvas.onmouseup = function(){
@@ -621,7 +631,7 @@ function drawLine(x1,y1,x2,y2){
 
 解决办法：
 
-canvas的API中，可以清除像素的就是clearRect方法，但是clearRect方法的清除区域矩形，毕竟大部分人的习惯中的橡皮擦都是圆形的，所以就引入了剪辑区域这个强大的功能，也就是clip方法。用法很简单：　 
+canvas的API中，可以清除像素的就是`clearRect`方法，但是`clearRect`方法的清除区域矩形，毕竟大部分人的习惯中的橡皮擦都是圆形的，所以就引入了剪辑区域这个强大的功能，也就是`clip`方法。用法很简单：　 
 
 ```js
 ctx.save()
@@ -660,7 +670,20 @@ maximum-scale=1.0,minimum-scale=1.0"/>
 
 在`touch`事件里，是通过`.touches[0].clientX`和`.touches[0].clientY`来获取坐标的，这点要和`mouse`事件区别开。 
 
-### 问题5：出现一个问题就是清空之后，重新画，然后出现原来的画的东西
+### 问题5：当浏览器大小变化时，画布被清空
+解决办法1：http://js.jirengu.com/dafic/2/edit
+
+解决办法2：http://js.jirengu.com/worus/2/edit
+
+参考链接：[canvas长宽变化时，画布内容消失](https://blog.csdn.net/vuturn/article/details/47807899)
+### 问题6：当橡皮擦移动很快时会变成圆点
+参考链接：
+[HTML5 实现橡皮擦的擦除效果](https://www.cnblogs.com/axes/p/3850309.html)
+
+### 问题7：橡皮擦把背景层都给擦掉了，橡皮擦需要优化
+嗯嗯，这个问题尚未解决，所以我就先把自定义背景颜色的功能取消掉
+
+### 问题8：出现一个问题就是清空之后，重新画，然后出现原来的画的东西
 
 这个嘛，问题不大，只不过是我漏写context.beginPath(); ，也花了一点时间在上面解决bug，让我想起“代码千万行,注释第一行;编程不规范,同事两行泪 ”，还是按照文档操作规范操作好，真香！！！
 
@@ -668,7 +691,7 @@ maximum-scale=1.0,minimum-scale=1.0"/>
 >
 >本文如有错误之处，请留言，我会及时更正
 >
->或者提bug、需求也是可以的
+>或者提bug、提需求也是可以的
 >
 >觉得对您有帮助的话就**点个赞**或**收藏**吧！
 >
